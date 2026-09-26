@@ -2,6 +2,10 @@
 
 LedgerLens turns an ERP-style CSV export into an interactive monthly performance report. It is a local Flask application built with pandas and Matplotlib.
 
+## Screenshot
+
+![LedgerLens CSV upload and sample-data screen](screenshots/ledgerlens-upload.png)
+
 ## Features
 
 - KPI dashboard: revenue, average transaction value, gross profit, margin, units sold, revenue per unit, and latest-month change when the data supports them.
