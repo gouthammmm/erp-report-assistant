@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% set s = report.summary %}
+{% set months = s.monthly_revenue.keys()|list %}
+{% block title %}Report · LedgerLens{% endblock %}
+{% block content %}
+  <section class="report-heading">
+    <div>
+      <div class="eyebrow">REPORT OVERVIEW</div>
+      <h1>Your data, in focus.</h1>
+      <p class="subtitle">{{ source_name }} <span class="dot-separator">·</span> Generated {{ report.generated_at }} UTC</p>
+    </div>
+    <a class="button secondary-button" href="{{ url_for('index') }}">← New analysis</a>
+  </section>
+
+  <section class="kpi-grid" aria-label="Key performance indicators">
+    <article class="kpi-card featured-kpi">
+      <div class="kpi-label">Total revenue</div>
+      <div class="kpi-value">{{ s.currency }} {{ "{:,.2f}".format(s.total_revenue) }}</div>
+      <div class="kpi-foot">{{ s.row_count }} usable transactions</div>
+    </article>
+    {% if s.gross_profit is defined %}
+    <article class="kpi-card">
+      <div class="kpi-label">Gross profit</div>
+      <div class="kpi-value">{{ s.currency }} {{ "{:,.2f}".format(s.gross_profit) }}</div>
+      <div class="kpi-foot">Cost {{ s.currency }} {{ "{:,.2f}".format(s.total_cost) }}</div>
+    </article>
+    <article class="kpi-card">
+      <div class="kpi-label">Gross margin</div>
+      <div class="kpi-value">{{ s.margin_pct }}%</div>
+      <div class="kpi-foot">Profit as a share of revenue</div>
+    </article>
+    {% endif %}
+    <article class="kpi-card">
+      <div class="kpi-label">Avg. transaction</div>
+      <div class="kpi-value">{{ s.currency }} {{ "{:,.2f}".format(s.average_transaction_revenue) }}</div>
+      <div class="kpi-foot">Median {{ s.currency }} {{ "{:,.2f}".format(s.median_transaction_revenue) }}</div>
+    </article>
+    {% if s.total_units is defined %}
+    <article class="kpi-card">
+      <div class="kpi-label">Units sold</div>
+      <div class="kpi-value">{{ "{:,.0f}".format(s.total_units) }}</div>
+      <div class="kpi-foot">{% if s.revenue_per_unit is not none %}{{ s.currency }} {{ "{:,.2f}".format(s.revenue_per_unit) }} per unit{% else %}No unit revenue available{% endif %}</div>
+    </article>
+    {% endif %}
+    {% if s.mom_change_pct is not none %}
+    <article class="kpi-card">
+      <div class="kpi-label">Latest month change</div>
+      <div class="kpi-value {{ 'positive' if s.mom_change_pct >= 0 else 'negative' }}">{{ "%+.1f".format(s.mom_change_pct) }}%</div>
+      <div class="kpi-foot">{{ s.last_month }} vs {{ s.previous_month }}</div>
+    </article>
+    {% endif %}
+  </section>
+
+  <section class="card comparison-card">
+    <div class="section-heading">
+      <span class="step-number">02</span>
+      <div><h2>Compare periods</h2><p>Select any two months present in your file.</p></div>
+    </div>
+    {% if months|length >= 2 %}
+    <form method="POST" action="{{ url_for('compare') }}" class="comparison-form">
+      <label>Earlier month
+        <select name="earlier_month">
+          {% for month in months %}<option value="{{ month }}" {% if comparison is defined and comparison.earlier_month == month %}selected{% elif comparison is not defined and loop.first %}selected{% endif %}>{{ month }}</option>{% endfor %}
+        </select>
+      </label>
+      <span class="compare-arrow" aria-hidden="true">→</span>
+      <label>Later month
+        <select name="later_month">
+          {% for month in months %}<option value="{{ month }}" {% if comparison is defined and comparison.later_month == month %}selected{% elif comparison is not defined and loop.last %}selected{% endif %}>{{ month }}</option>{% endfor %}
+        </select>
+      </label>
+      <button class="button primary-button" type="submit">Compare months</button>
+    </form>
+    {% else %}
+      <p class="empty-note">At least two distinct calendar months are needed for a comparison.</p>
+    {% endif %}
+    {% if comparison is defined %}
+    <div class="comparison-result">
+      <div><span class="kpi-label">Revenue change</span><strong>{{ comparison.currency }} {{ "%+.2f".format(comparison.change_amount) }}</strong></div>
+      <div><span class="kpi-label">Percent change</span><strong class="{{ 'positive' if comparison.change_amount >= 0 else 'negative' }}">{% if comparison.change_pct is not none %}{{ "%+.1f".format(comparison.change_pct) }}%{% else %}New revenue{% endif %}</strong></div>
+      <div><span class="kpi-label">Transactions</span><strong>{{ comparison.earlier_transactions }} <span class="muted">→</span> {{ comparison.later_transactions }}</strong></div>
+      {% if comparison.earlier_profit is defined %}<div><span class="kpi-label">Gross profit</span><strong>{{ comparison.currency }} {{ "{:,.2f}".format(comparison.earlier_profit) }} <span class="muted">→</span> {{ comparison.currency }} {{ "{:,.2f}".format(comparison.later_profit) }}</strong></div>{% endif %}
+    </div>
+    {% endif %}
+  </section>
+
+  <section class="content-grid">
+    <div class="card flags-card">
+      <div class="card-heading"><div><div class="eyebrow">RULE-BASED REVIEW</div><h2>Alerts &amp; data quality</h2></div><span class="count-pill">{{ report.flags|length }}</span></div>
+      <div class="flag-list">
+        {% for flag in report.flags %}
+        <article class="flag-item {{ flag.level }}">
+          <span class="flag-marker" aria-hidden="true"></span>
+          <div><strong>{{ flag.title }}</strong><p>{{ flag.detail }}</p></div>
+        </article>
+        {% endfor %}
+      </div>
+      <div class="quality-summary">
+        <span><strong>{{ s.data_quality.rows_included }}</strong> included</span>
+        <span><strong>{{ s.data_quality.rows_excluded }}</strong> excluded</span>
+        <span><strong>{{ s.data_quality.duplicate_rows }}</strong> exact duplicates</span>
+      </div>
+    </div>
+
+    <div class="card narrative-card">
+      <div class="eyebrow">WRITTEN SUMMARY</div>
+      <h2>Executive narrative</h2>
+      <pre class="narrative-box">{{ report.narrative }}</pre>
+      <div class="download-actions">
+        <a class="button primary-button" href="{{ url_for('download') }}">Download summary</a>
+        <a class="button secondary-button" href="{{ url_for('download_monthly_csv') }}">Download monthly CSV</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="card chart-card">
+    <div class="card-heading"><div><div class="eyebrow">PERFORMANCE TRENDS</div><h2>Revenue breakdown</h2></div></div>
+    <div class="charts-grid">
+      {% for key, img in report.charts.items() %}
+      <figure class="chart-figure">
+        <img src="data:image/png;base64,{{ img }}" alt="{{ key|replace('_', ' ')|title }} chart">
+        <figcaption>{{ key|replace('_', ' ')|title }}</figcaption>
+      </figure>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="card monthly-card">
+    <div class="card-heading"><div><div class="eyebrow">PERIOD DETAIL</div><h2>Monthly performance</h2></div></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Month</th><th>Revenue</th><th>Transactions</th>{% if s.monthly_cost is defined %}<th>Cost</th><th>Gross profit</th>{% endif %}</tr></thead>
+        <tbody>
+          {% for month, revenue in s.monthly_revenue.items() %}
+          <tr><th scope="row">{{ month }}</th><td>{{ s.currency }} {{ "{:,.2f}".format(revenue) }}</td><td>{{ s.monthly_transactions[month] }}</td>{% if s.monthly_cost is defined %}<td>{{ s.currency }} {{ "{:,.2f}".format(s.monthly_cost[month]) }}</td><td>{{ s.currency }} {{ "{:,.2f}".format(s.monthly_profit[month]) }}</td>{% endif %}</tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+{% endblock %}
