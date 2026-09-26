@@ -1,0 +1,41 @@
+date,region,product,category,units_sold,unit_price,revenue,cost
+2026-01-05,Abu Dhabi,Widget A,Hardware,120,45.00,5400.00,3600.00
+2026-01-05,Dubai,Widget A,Hardware,95,45.00,4275.00,2850.00
+2026-01-06,Sharjah,Widget B,Hardware,60,80.00,4800.00,3300.00
+2026-01-06,Abu Dhabi,Service Plan,Services,30,150.00,4500.00,900.00
+2026-01-07,Dubai,Widget C,Hardware,40,120.00,4800.00,3200.00
+2026-01-08,Abu Dhabi,Widget A,Hardware,110,45.00,4950.00,3300.00
+2026-01-08,Sharjah,Service Plan,Services,20,150.00,3000.00,600.00
+2026-01-09,Dubai,Widget B,Hardware,75,80.00,6000.00,4125.00
+2026-01-10,Abu Dhabi,Widget C,Hardware,15,120.00,1800.00,1200.00
+2026-01-10,Dubai,Service Plan,Services,45,150.00,6750.00,1350.00
+2026-01-12,Sharjah,Widget A,Hardware,88,45.00,3960.00,2640.00
+2026-01-13,Abu Dhabi,Widget B,Hardware,54,80.00,4320.00,2970.00
+2026-01-14,Dubai,Widget A,Hardware,130,45.00,5850.00,3900.00
+2026-01-15,Sharjah,Widget C,Hardware,22,120.00,2640.00,1760.00
+2026-01-16,Abu Dhabi,Service Plan,Services,38,150.00,5700.00,1140.00
+2026-01-17,Dubai,Widget B,Hardware,66,80.00,5280.00,3630.00
+2026-01-18,Sharjah,Widget A,Hardware,70,45.00,3150.00,2100.00
+2026-01-19,Abu Dhabi,Widget C,Hardware,8,120.00,960.00,640.00
+2026-01-20,Dubai,Widget C,Hardware,50,120.00,6000.00,4000.00
+2026-01-21,Sharjah,Service Plan,Services,25,150.00,3750.00,750.00
+2026-02-02,Abu Dhabi,Widget A,Hardware,140,45.00,6300.00,4200.00
+2026-02-03,Dubai,Widget A,Hardware,102,45.00,4590.00,3060.00
+2026-02-04,Sharjah,Widget B,Hardware,58,80.00,4640.00,3190.00
+2026-02-05,Abu Dhabi,Service Plan,Services,42,150.00,6300.00,1260.00
+2026-02-06,Dubai,Widget C,Hardware,5,120.00,600.00,400.00
+2026-02-07,Abu Dhabi,Widget A,Hardware,115,45.00,5175.00,3450.00
+2026-02-08,Sharjah,Service Plan,Services,18,150.00,2700.00,540.00
+2026-02-09,Dubai,Widget B,Hardware,80,80.00,6400.00,4400.00
+2026-02-10,Abu Dhabi,Widget C,Hardware,60,120.00,7200.00,4800.00
+2026-02-11,Dubai,Service Plan,Services,50,150.00,7500.00,1500.00
+2026-02-12,Sharjah,Widget A,Hardware,92,45.00,4140.00,2760.00
+2026-02-13,Abu Dhabi,Widget B,Hardware,49,80.00,3920.00,2695.00
+2026-02-14,Dubai,Widget A,Hardware,125,45.00,5625.00,3750.00
+2026-02-15,Sharjah,Widget C,Hardware,3,120.00,360.00,240.00
+2026-02-16,Abu Dhabi,Service Plan,Services,35,150.00,5250.00,1050.00
+2026-02-17,Dubai,Widget B,Hardware,70,80.00,5600.00,3850.00
+2026-02-18,Sharjah,Widget A,Hardware,65,45.00,2925.00,1950.00
+2026-02-19,Abu Dhabi,Widget C,Hardware,2,120.00,240.00,160.00
+2026-02-20,Dubai,Widget C,Hardware,45,120.00,5400.00,3600.00
+2026-02-21,Sharjah,Service Plan,Services,22,150.00,3300.00,660.00
